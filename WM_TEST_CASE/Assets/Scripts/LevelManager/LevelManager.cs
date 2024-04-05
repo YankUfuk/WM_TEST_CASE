@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public static LevelManager main;
 
-    // Update is called once per frame
-    void Update()
+    public Transform startPosition;
+    public Transform[] path;
+
+    private void Awake()
     {
-        
+        main = this;
     }
 }
