@@ -33,7 +33,6 @@ public class Plot : MonoBehaviour
 
         if (towerToBuild.cost > LevelManager.main.currency)
         {
-            Debug.Log("x");
             return;
         }
 
