@@ -1566,7 +1566,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Test Turret
+  m_text: Ice Turret
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1966,7 +1966,7 @@ GameObject:
   - component: {fileID: 477240508}
   - component: {fileID: 477240507}
   m_Layer: 5
-  m_Name: TestTurret
+  m_Name: IceTurret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8079,6 +8079,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyPrefabs:
   - {fileID: 4544771455905828259, guid: 58ee35eee96c1284e88aa205eec1b602, type: 3}
+  - {fileID: 4544771455905828259, guid: 58ee35eee96c1284e88aa205eec1b602, type: 3}
+  - {fileID: 4544771455905828259, guid: 58ee35eee96c1284e88aa205eec1b602, type: 3}
+  - {fileID: 4544771455905828259, guid: d9c1dce3434cd3144b362617e63d69a1, type: 3}
   baseEnemies: 8
   enemiesPerSecond: 0.5
   timeBetweenWaves: 5
@@ -8099,9 +8102,9 @@ MonoBehaviour:
   - name: Basic Turret
     cost: 100
     prefab: {fileID: 6820852227097855885, guid: c5ecb62277d7ce849b5bf18e490d0c64, type: 3}
-  - name: Test Turret
-    cost: 150
-    prefab: {fileID: 6820852227097855885, guid: a0d4a6d2b06f342478dbdecd57874685, type: 3}
+  - name: Ice Turret
+    cost: 500
+    prefab: {fileID: 3356438022150701135, guid: c69e0ba4fd284004eb27af5afe9c533b, type: 3}
 --- !u!1001 &1881574265
 PrefabInstance:
   m_ObjectHideFlags: 0

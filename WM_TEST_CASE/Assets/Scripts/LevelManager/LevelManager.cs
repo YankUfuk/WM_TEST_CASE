@@ -9,6 +9,9 @@ public class LevelManager : MonoBehaviour
     public Transform startPosition;
     public Transform[] path;
 
+    private bool gameEnded = false;
+    public GameObject gameOverUI;
+
     public int currency;
 
     private void Awake()
@@ -20,7 +23,22 @@ public class LevelManager : MonoBehaviour
     {
         currency = 100;
     }
+    private void Update()
+    {
+        if (gameEnded) return;
 
+        if(PlayerStats.lives <= 0)
+        {
+            EndGame();
+        }
+
+    }
+
+    private void EndGame()
+    {
+        gameEnded = true;
+        gameOverUI.SetActive(true);
+    }
     public void IncreaseCurrency(int amount)
     {
         currency += amount;
