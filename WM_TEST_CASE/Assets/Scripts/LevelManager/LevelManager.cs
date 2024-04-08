@@ -1,75 +1,84 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    public static LevelManager main;
+    public static LevelManager main; // Singleton instance of the LevelManager
 
-    public Transform startPosition;
-    public Transform[] path;
+    // Enemy pathfinding attributes
+    public Transform startPosition; 
+    public Transform[] path; 
 
-    private bool gameEnded = false;
-    public GameObject gameOverUI;
-    public GameObject winningUI;
+    //UI Objects for displaying when the game is ended.
+    public GameObject gameOverUI; 
+    public GameObject winningUI; 
 
-    private EnemySpawner enemySpawner;
+    private bool gameEnded = false;// Checks whether the game is ended or not
 
-    public int currency;
+    private EnemySpawner enemySpawner; // Enemy spawner reference
+
+    public int currency; 
 
     private void Awake()
     {
-        main = this;
+        main = this; // Assigning the singleton instance of LevelManager
     }
 
     private void Start()
     {
-        enemySpawner = FindObjectOfType<EnemySpawner>();
-        currency = 100;
+        enemySpawner = FindObjectOfType<EnemySpawner>(); // Finding the EnemySpawner component in the scene
+        currency = 100; 
     }
+
     private void Update()
     {
-        if (gameEnded) return;
+        if (gameEnded) return; // If the game has ended, exit the update loop
 
-        if(PlayerStats.lives <= 0)
+        // Check if the player has run out of lives
+        if (PlayerStats.lives <= 0)
         {
-            EndGame();
-            GetComponent<EnemySpawner>().enabled = false;
-        }
-        if(enemySpawner.currentWave == 20)
-        {
-            WinGame();
-            GetComponent<EnemySpawner>().enabled = false;
+            EndGame(); 
+            GetComponent<EnemySpawner>().enabled = false; // Stop enemy spawning
         }
 
+        // If player can survive for 20 waves
+        if (enemySpawner.currentWave == 20)
+        {
+            WinGame(); 
+            GetComponent<EnemySpawner>().enabled = false; // Stop enemy spawning
+        }
     }
 
     private void WinGame()
     {
-        gameEnded = true;
-        winningUI.SetActive(true);
+        gameEnded = true; 
+        winningUI.SetActive(true); // Activate the winning UI
         
     }
+
     private void EndGame()
     {
-        gameEnded = true;
-        gameOverUI.SetActive(true);
-    }
-    public void IncreaseCurrency(int amount)
-    {
-        currency += amount;
+        gameEnded = true; 
+        gameOverUI.SetActive(true); // Activate the game over UI
+        
     }
 
+    // Method for increasing currency
+    public void IncreaseCurrency(int amount)
+    {
+        currency += amount; 
+    }
+
+    // Method for spending currency
     public bool SpendCurrency(int amount)
     {
-        if (amount <= currency)
+        if (amount <= currency) // Check if the player has enough currency
         {
-            currency -= amount;
-            return true;
+            currency -= amount; // Subtract spent amount from currency
+            return true; 
         }
         else
         {
-            return false;
+            return false; // Return false indicating insufficient currency
         }
     }
 }

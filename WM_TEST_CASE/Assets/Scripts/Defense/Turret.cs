@@ -1,82 +1,35 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
-public class Turret : MonoBehaviour
+public class Turret : BaseTurret 
 {
-    [SerializeField] private Transform turretRotationPoint;
-    [SerializeField] private LayerMask enemyMask;
-
-    [SerializeField] private float targetingRange = 5f;
-    [SerializeField] private float rotationSpeed = 5f;
-
-    [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private Transform firingPoint;
-
-    [SerializeField] private float bulletPerSec = 1f;
-
-    private Transform target;
-    private float timeUntilFire;
-
-
-    private void Update()
+    public override void FindTarget() // Overrides the FindTarget method defined in the base class
     {
-        if (target == null)
-        {
-            FindTarget();
-            return;
-        }
-        RotateTowardsTarget();
+        RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, targetingRange, (Vector2)transform.position, 0f, enemyMask); // Casts a circle from the turret's position to detect enemies within its range and stores the results in the hits array
 
-        if (!CheckTargetIsInRange())
+        if (hits.Length > 0) // Checks if there are any enemies detected
         {
-            target = null;
-        }
-        else
-        {
-            timeUntilFire += Time.deltaTime;
-
-            if (timeUntilFire >= 1f / bulletPerSec)
-            {
-                Shoot();
-                timeUntilFire = 0f;
-            }
+            target = hits[0].transform; // Sets the first detected enemy as the target
         }
     }
 
-    private void Shoot()
+    public override bool CheckTargetIsInRange() // Overrides the CheckTargetIsInRange method defined in the base class
     {
-        GameObject bulletObj = Instantiate(bulletPrefab, firingPoint.position, Quaternion.identity);
-        Bullet bulletScript = bulletObj.GetComponent<Bullet>();
-        bulletScript.SetTarget(target);
+        return Vector2.Distance(target.position, transform.position) <= targetingRange; // Returns true if the distance between the turret and the target is less than or equal to the targeting range
     }
 
-    private void FindTarget()
+    public override void RotateTowardsTarget() // Overrides the RotateTowardsTarget method defined in the base class
     {
-        RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, targetingRange, (Vector2)transform.position, 0f, enemyMask);
-
-        if (hits.Length > 0)
-        {
-            target = hits[0].transform;
-        }
+        float angle = Mathf.Atan2(target.position.y - transform.position.y, target.position.x - transform.position.x) * Mathf.Rad2Deg - 90f; // Calculates the angle to rotate the turret towards the target
+        Quaternion targetRotation = Quaternion.Euler(new Vector3(0f, 0f, angle)); // Creates a quaternion representing the target rotation
+        turretRotationPoint.rotation = Quaternion.RotateTowards(turretRotationPoint.rotation, targetRotation, rotationSpeed * Time.deltaTime); // Rotates the turret towards the target rotation
     }
 
-    private bool CheckTargetIsInRange()
+    public override void Shoot() // Overrides the Shoot method defined in the base class
     {
-        return Vector2.Distance(target.position, transform.position) <= targetingRange;
-    }
-
-    private void RotateTowardsTarget()
-    {
-        float angle = Mathf.Atan2(target.position.y - transform.position.y, target.position.x - transform.position.x) * Mathf.Rad2Deg - 90f;
-        Quaternion targetRotation = Quaternion.Euler(new Vector3(0f, 0f, angle));
-        turretRotationPoint.rotation = Quaternion.RotateTowards(turretRotationPoint.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        Handles.color = Color.cyan;
-        Handles.DrawWireDisc(transform.position, transform.forward, targetingRange);
+        GameObject bulletObj = Instantiate(bulletPrefab, firingPoint.position, Quaternion.identity); // Instantiates a bullet object at the firing point
+        Bullet bulletScript = bulletObj.GetComponent<Bullet>(); // Retrieves the Bullet component attached to the bullet object
+        bulletScript.SetTarget(target); // Sets the target for the bullet
     }
 }
+
+
